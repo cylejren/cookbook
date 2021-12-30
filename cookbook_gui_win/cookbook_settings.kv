@@ -1,0 +1,165 @@
+# cookbook_settings.kv
+
+<BoxLayout>:
+    canvas.after:
+        Color:
+            rgb: 1,0,0
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+        Color:
+            rgb: 1,1,1
+
+<Gridlayout>:
+    canvas.after:
+        Color:
+            rgb: 0,0,1
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+        Color:
+            rgb: 1,0,0
+
+<LabelOption@Label>:
+    size_hint_x: .9
+    text_size: self.size
+    halign: 'left'
+    valign: 'middle'
+    canvas.after:
+        Color:
+            rgb: 0,1,1
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+        Color:
+            rgb: 1,0,0
+
+<TextInputOption@TextInput>:
+    multiline: False
+    size_hint_x: .1
+    canvas.after:
+        Color:
+            rgb: 0,1,1
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+        Color:
+            rgb: 1,0,0
+
+<Settings>:
+    size_hint: .5, .6
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        Label:
+            size_hint_y: .1
+            text: 'OPCJE'
+            bold: True
+            font_size: 25
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 5
+
+            Label:
+                size_hint_y: .1
+                padding_x: 10
+                text: 'Og\u00f3lne'
+                underline: True
+                font_size: 18
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+
+            GridLayout:
+                id: option_window
+                padding: 7
+                spacing: 7
+                rows: 1
+                columns: 2
+                row_force_default: True
+                row_default_height: 25
+                size_hint_x: .35
+                size_hint_y: .2
+
+                LabelOption:
+                    text: 'pocz\u0105tkowa ksi\u0105\u017aka: '
+                TextInputOption:
+
+            Label:
+                size_hint_y: .1
+                padding_x: 10
+                text: 'Czcionka'
+                underline: True
+                font_size: 18
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+
+            GridLayout:
+                id: option_window
+                padding: 7
+                spacing: 7
+                rows: 7
+                columns: 2
+                row_force_default: True
+                row_default_height: 20
+
+
+                LabelOption:
+                    text: 'rozmiar tesktu w polu Sk\u0142adniki: '
+                TextInputOption:
+
+                LabelOption:
+                    text: 'rozmiar tesktu w polu Opis: '
+                TextInputOption:
+
+                LabelOption:
+                    text: 'kolor tesktu w polu Sk\u0142adniki: '
+                TextInputOption:
+
+                LabelOption:
+                    text: 'kolor tesktu w polu Opis: '
+                TextInputOption:
+
+                LabelOption:
+                    text: 'rodzaj czcionki w polu Sk\u0142adniki: '
+                TextInputOption:
+
+                LabelOption:
+                    text: 'rodzaj czcionki w polu Opis: '
+                TextInputOption:
+
+                LabelOption:
+                    text: 'kolor nazwy przepisu: '
+                TextInputOption:
+
+
+#<Options>:
+#     size_hint: .5, .6
+#     GridLayout:
+#         id: options_window
+#         #orientation: 'horizontal'
+#         cols: 2
+#         ScrollView:
+#             size_hint: .20, 1
+#             TreeOptions:
+#                 id: tree_options
+#                 #hide_root: False
+#                 indent_level: 20
+#                 size_hint: .99, None
+#                 #root_options: dict(text = 'OPCJE', font_size = 20, bold = True)
+#                 TreeViewLabelCustom:
+#                     text: 'aaaa'
+#
+#         BoxLayout:
+#             id: options_view
+#             backgorund_color: 0,0,0
+#             GridLayout:
+#                 cols: 2
+#                 Label:
+#                     text: 'rozmiar tesktu przepisu: '
+#                 TextInput:
+#                     id: option_recipe_font_size
+#                     multiline: False
+#                     on_text: root.set_recipe_view_font(self.text)
+#                     on_focus: root.set_recipe_view_font(self.text)
