@@ -1,0 +1,188 @@
+# cookbook.kv
+
+#:include cookbook_popups.kv
+##:include cookbook_settings.kv
+#:include cookbook_add_edit_recipe.kv
+#:include cookbook_recipe_view.kv
+
+
+<CheckboxLabel@Label>:
+    size_hint_x: .7
+    text_size: self.size
+    halign: 'left'
+    valign: 'middle'
+
+<CheckboxButton@CheckBox>:
+    size_hint_x: .3
+    state: 'down'
+
+
+<MainScreen>:
+    orientation: "vertical"
+    padding: 10
+    spacing: 10
+    #display: entry
+    tree_view: tree
+
+    BoxLayout:
+        id: menu
+        size_hint_y: .1
+
+        Button:
+            text: 'Dodaj przepis'
+            on_press: root.add_recipe_button()
+        Button:
+            text: 'Edytuj przepis'
+            on_press: root.edit_recipe_button()
+        Button:
+            text: 'Usu\u0144 przepis'
+            on_press: root.remove_recipe_button()
+        Button:
+            text: 'Dodaj kategori\u0119'
+            on_press: root.add_category_button()
+        Button:
+            text: 'Usu\u0144 kategori\u0119'
+            on_press: root.remove_category_button()
+
+        Button:
+            id: dropdown_button
+            dropdown_widget: dropdown_menu.__self__
+                                            # __self__ keeps the reference to the drop_down widget alive
+            text: "Wi\u0119cej..."
+            on_release: self.dropdown_widget.open(self)
+
+            Widget:
+                on_parent: dropdown_menu.dismiss()
+
+            DropDownMenu:
+                id: dropdown_menu
+                on_select: root.dropdown_button_action(args[1])
+
+                Button:
+                    text: 'Zmie\u0144 nazw\u0119'
+                    size_hint_y: None
+                    height: dropdown_button.height
+                    on_release: dropdown_menu.select('change_name')
+
+                Button:
+                    text: 'Lista tag\u00F3w'
+                    size_hint_y: None
+                    height: dropdown_button.height
+                    on_release: dropdown_menu.select('show_tag_list')
+
+                Button:
+                    text: 'Zarz\u0105dzaj ksi\u0105\u017Ckami'
+                    size_hint_y: None
+                    height: dropdown_button.height
+                    on_release: dropdown_menu.select('managing_user_db')
+
+                Button:
+                    text: 'Opcje'
+                    size_hint_y: None
+                    height: dropdown_button.height
+                    on_release: dropdown_menu.select('settings')
+
+    BoxLayout:
+        id: search
+        orientation: 'horizontal'
+        size_hint_y: .1
+        size_hint_x: .8
+
+        GridLayout:
+            rows: 3
+            columns: 2
+            size_hint_x: .1
+            CheckboxButton:
+                id: checkbox_title
+            CheckboxLabel:
+                text: 'tytu\u0142'
+            CheckboxButton:
+                id: checkbox_tags
+            CheckboxLabel:
+                text: 'tagi'
+            CheckboxButton:
+                id: checkbox_ingredients
+            CheckboxLabel:
+                text: 'sk\u0142adniki'
+
+        TextInput:
+            id: entry_search
+            multiline: False
+            hint_text: 'szukaj...'
+            font_size: self.height /2.5
+            size_hint_x: .7
+
+            on_text:
+                # undo changes after search
+                if entry_search.text == '': root.on_text_add_recipe_tp_tree()
+
+            # when press ENTER
+            on_text_validate:
+                if entry_search.text != "": root.search()
+
+
+    BoxLayout:
+        id: main_view
+        orientation: "horizontal"
+
+        ScrollView:
+            id: tree_scroll_view
+            size_hint: .20, 1
+            TreeCategory:
+                id: tree
+                hide_root: False
+                indent_level: 20
+                size_hint: .99, None
+                #stare bez scrollview: size_hint: .25, 1
+                root_options: dict(text = 'MOJE PRZEPISY', font_size = 20, bold = True, node_property = 'root')
+        BoxLayout:
+            id: recipe_view
+            backgorund_color: 0,0,0
+
+
+<ToggleButton>:
+    size_hint: .12, .12
+    group: 'tag'
+
+    #text_size: self.size
+    #halign: 'center'
+    #valign: 'middle'
+    #on_state: app.root.on_state(self)
+
+
+<TagList>:
+    size_hint: .5, .5
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        TagToggleButtons:
+            id: tags_toggle_buttons
+            spacing: 3
+        BoxLayout:
+            spacing: 8
+            size_hint_y: .2
+            ortientation: 'horizontal'
+            Button:
+                text: 'ZMIE\u0143 NAZW\u0118'
+                on_press: tags_toggle_buttons.change_tag_name()
+            Button:
+                text: 'USU\u0143'
+                on_press: tags_toggle_buttons.remove_tag()
+            Button:
+                text: 'ZAMKNIJ'
+                on_press: root.dismiss()
+
+
+<BubbleMenu>:
+    id: bubble_right_click
+    orientation: 'horizontal'
+    size_hint: (None, None)
+    size: (250, 50)
+    arrow_pos: 'bottom_mid'
+    focused: True
+    #BubbleButton:
+    #    text: 'Usun'
+    #   on_press: print('fff')
+    #BubbleButton:
+    #   text: 'Zmien nazwe'
+    #    on_press: print('ggg')
