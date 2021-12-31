@@ -1,0 +1,1008 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+    <script type="text/javascript" src="/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-1.8.13.custom.min.js"></script>
+    <meta name="title" content="Pepperplate and Pepperplate for iPad, iPhone, Android and Kindle Fire - Your recipes, menus, shopping lists and cooking timers." /><meta name="description" content="Pepperplate has all the tools you need to cook weeknight dinners or host a dinner party for 12. Manage your recipes, create menus, shop with ease and cook like a pro." /><meta name="keywords" content="Recipe, Menu &amp; Cooking Planner, Lifestyle, Productivity, ios apps, app, appstore, app store, iphone, ipad, ipod touch, itouch, itunes, Android, Android apps, Android Market, Kindle Fire, windows, windows 8, recipe organizing, recipe organizer, food shopping, meal planning, pepper, plate, pepper plate" /><meta name="apple-itunes-app" content="app-id=403188971" /><meta name="msApplication-ID" content="Pepperplate.RecipeMenuCookingPlanner" /><meta name="msApplication-PackageFamilyName" content="Pepperplate.RecipeMenuCookingPlanner_cs1tv1brcfn9t" /><meta http-equiv="content-type" content="text/html; charset=utf-8" /><meta http-equiv="content-language" content="en-us" />
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18648905-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+    <!-- End Google Analytics -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.widget("custom.catcomplete", $.ui.autocomplete, {
+                _renderMenu: function (ul, items) {
+                    var self = this,
+				    currentCategory = "";
+                    $.each(items, function (index, item) {
+                        if (item.category != currentCategory) {
+                            ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+                            currentCategory = item.category;
+                        }
+                        self._renderItem(ul, item);
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    <title>Pepperplate - bananowe placuszki z miodem</title>
+    <script type="text/javascript" src="/js/jquery.checkbox.js"></script>
+    <script type="text/javascript" src="/js/jquery.jnotify.js"></script>
+    <script type="text/javascript" src="/js/datepicker.js"></script>
+    <script type="text/javascript" src="/js/jquery.fcbkcomplete.js"></script>
+    <script type="text/javascript" src="/js/jquery.maxlength.js"></script>
+    <link rel="Stylesheet" type="text/css" href="/css/datepicker.css" />
+    <link rel="Stylesheet" type="text/css" href="/css/forms.css" />
+    <link rel=Stylesheet type="text/css" media="print" href="/css/print.css" />
+
+
+    <link rel="Stylesheet" type="text/css" href="/upload/uploadify.css" />
+    <script type="text/javascript" src="/upload/swfobject.js"></script>
+    <script type="text/javascript" src="/upload/jquery.uploadify.v2.1.4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var calendar;
+
+        $(document).ready(function () {
+
+            replaceCheckbox( 'input[type=checkbox]', '/img/check_on.png', '/img/check_off.png' );
+
+            $('#notification').jnotifyInizialize({
+                oneAtTime: true
+            });
+
+            $('textarea[maxchars]').limitMaxlength();
+
+            registerSidebarPlanner();
+
+            $("#tagSelection").fcbkcomplete({
+                json_url: "/search/tags.ashx",
+                height: 5,
+                maxshownitems: 4,
+                maxitems: 20,
+                newel: true,
+                filter_selected: true,
+                choose_on_comma: true,
+                choose_on_tab: true,
+                choose_on_enter: true,
+                complete_text: "test text here"
+            });
+
+            $("#cphMiddle_cphSidebar_tbAddRelatedRecipe").autocomplete({
+                source: "/search/recipes.ashx",
+                minLength: 1,
+                appendTo: "#addrelatedcontainer",
+                select: function (event, ui) {
+                    $("#cphMiddle_cphSidebar_hfAddRelatedRecipe").val(ui.item.id);
+                    $("#cphMiddle_cphSidebar_btnAddRelatedRecipe").click();
+                }
+            });
+        });
+
+        function addToShopping()
+        {
+            toggleShoppingIngredients( true );
+
+            $.colorbox( {
+                inline: true,
+                width: "420px",
+                href: "#additemstoshoplist",
+                title: "ADD TO SHOPPING LIST",
+                transition: "none",
+                opacity: 0.5,
+                onLoad: function() { $( '#colorbox' ).show(); }
+            } );
+        }
+
+        function toggleShoppingIngredients(checked) {
+            if (checked) {
+                $('#additemstoshoplist input[type=checkbox]:not(:checked)').each(function () {
+                    $(this).click();
+                });
+            }
+            else {
+                $('#additemstoshoplist input[type=checkbox]:checked').each(function () {
+                    $(this).click();
+                });
+            }
+        }
+
+        function shareTwitter()
+        {
+            var width = 550;
+            var height = 450;
+            var left = parseInt((screen.availWidth/2) - (width/2));
+            var top = parseInt((screen.availHeight/2) - (height/2));
+
+            window.open( '/share/twitter.aspx?recipeid=11716024', 'Twitter', 'width=' + width +',height=' + height + ',top=' + top + ',left=' + left + ',screenY=' + top + ',screenX=' + left );
+        }
+
+        function shareFacebook()
+        {
+            var width = 950;
+            var height = 550;
+            var left = parseInt((screen.availWidth/2) - (width/2));
+            var top = parseInt((screen.availHeight/2) - (height/2));
+
+            window.open( '/share/facebook.aspx?recipeid=11716024', 'Facebook', 'width=' + width +',height=' + height + ',top=' + top + ',left=' + left + ',screenY=' + top + ',screenX=' + left );
+        }
+
+        function sharePinterest()
+        {
+            var width = 650;
+            var height = 550;
+            var left = parseInt((screen.availWidth/2) - (width/2));
+            var top = parseInt((screen.availHeight/2) - (height/2));
+
+            window.open( '/share/pinterest.aspx?recipeid=11716024', 'Pinterest', 'width=' + width +',height=' + height + ',top=' + top + ',left=' + left + ',screenY=' + top + ',screenX=' + left );
+        }
+
+        function switchScaler()
+        {
+            $( '.scaler .error' ).hide();
+
+            if( $('.scales').is(':visible') )
+            {
+                $('.scalertoggle').text('set scale');
+                $('.freescalefield').show();
+                $('.scales').hide();
+            }
+            else
+            {
+                $('.scalertoggle').text('free scale');
+                $('.freescalefield').hide();
+                $('.scales').show();
+            }
+        }
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            registerSort();
+        });
+
+        function registerSort() {
+
+            $('#emailicon').click(function (e) {
+                e.stopPropagation();
+                var item = $('.emailpopcontainer');
+
+                var visibleState = item.css('visibility') == 'visible';
+                item.css('visibility', visibleState ? 'hidden' : 'visible');
+
+                $('.emailpopcontainer .txt').val('');
+            });
+
+            $('.emailpopcontainer').click(function (e) {
+                e.stopPropagation();
+            });
+
+            $(document).click(function () {
+                $('.emailpopcontainer').css('visibility', 'hidden');
+            });
+        }
+    </script>
+
+
+<link rel="stylesheet" type="text/css" href="/css/global2.css?v=11" /><link rel="icon" href="/favicon.ico" type="image/x-icon" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <script type="text/javascript" src="/js/jquery.colorbox.js"></script>
+    <link rel="Stylesheet" type="text/css" href="/css/colorbox.css" />
+    <script src="/js/jquery.ui.selectmenu.js" type="text/javascript"></script>
+    <script src="/js/jquery.placeholder.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var searchTextSelectedTitle = '';
+        var searchSelectedId = null;
+
+        $( document ).ready( function()
+        {
+            $( ".rollover" ).hover(
+                function()
+                {
+                    this.src = this.src.replace( "_off", "_on" );
+                },
+                function()
+                {
+                    this.src = this.src.replace( "_on", "_off" );
+                }
+            );
+
+            $( "SELECT.drop" ).selectmenu();
+            $( "INPUT" ).placeholder( { className: 'txtplaceholder', blankSubmit: true } );
+
+            $( ".searchtxt" ).keypress( function( e )
+            {
+                if ( e.keyCode == 13 )
+                {
+                    loadSearchResult();
+                    return false;
+                }
+            } );
+
+            $( ".searchtxt" ).catcomplete( {
+                source: "/search/predict.ashx",
+                minLength: 1,
+                appendTo: "#searchautocontainer",
+                select: function( event, ui )
+                {
+                    window.location = "/recipes/view.aspx?id=" + searchSelectedId;
+                },
+                focus: function( event, ui )
+                {
+                    searchTextSelectedTitle = ui.item.value;
+                    searchSelectedId = ui.item.id;
+                }
+            } );
+
+            $( "#btnSearch" ).click( function( e ) {
+                loadSearchResult();
+            } );
+        } );
+
+        function loadSearchResult()
+        {
+             window.location = "/search/?text=" + encodeURIComponent( $( '.searchtxt' ).val() );
+        }
+    </script>
+    <script type='text/javascript'>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        (function () {
+            var gads = document.createElement('script');
+            gads.async = true;
+            gads.type = 'text/javascript';
+            var useSSL = 'https:' == document.location.protocol;
+            gads.src = (useSSL ? 'https:' : 'http:') +
+            '//www.googletagservices.com/tag/js/gpt.js';
+            var node = document.getElementsByTagName('script')[0];
+            node.parentNode.insertBefore(gads, node);
+        })();
+    </script>
+
+    <script type='text/javascript'>
+        googletag.cmd.push(function () {
+            googletag.defineSlot('/42688828/Pepperplate_300_250', [300, 250], 'div-gpt-ad-1388437863564-0').addService(googletag.pubads());
+            googletag.defineSlot('/42688828/Pepperplate_728_90', [728, 90], 'div-gpt-ad-1388437863564-1').addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+    <script type="text/javascript">
+        WebFont.load({
+            google: {
+                families: ['Archivo Narrow']
+            }
+        });
+    </script>
+<title>
+
+</title></head>
+<body>
+    <form method="post" action="./view.aspx?id=11716024" onsubmit="javascript:return WebForm_OnSubmit();" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="cphMiddle_cphTop_smPage_HiddenField" id="cphMiddle_cphTop_smPage_HiddenField" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTUyNDY2MTk4OQ8WAh4TVmFsaWRhdGVSZXF1ZXN0TW9kZQIBFgJmD2QWAmYPDxYCHhBTZWxlY3RlZE5hdkluZGV4ZmQWBGYPZBYEAggPZBYCAgEPZBYCAgEPFgIeBFRleHQFG2JhbmFub3dlIHBsYWN1c3praSB6IG1pb2RlbWQCDQ8WAh4HVmlzaWJsZWdkAgEPZBYKAgEPDxYCHwIFBVJlbmlhZGQCAg8PFgIeC05hdmlnYXRlVXJsBShodHRwczovL3d3dy5wZXBwZXJwbGF0ZS5jb20vcHJvZmlsZS5hc3B4ZGQCBA8WAh4FY2xhc3MFBmFjdGl2ZWQCCA9kFgICAQ8WAh8CBQIyMWQCCQ9kFgQCAw9kFhQCAw8PFgIfA2dkFgYCAQ8PFgIeCEltYWdlVXJsBVlodHRwOi8vY2RuMi5wZXBwZXJwbGF0ZS5jb20vcmVjaXBlcy81ZjllZWZiZjg4ZDU0MjAwOGE3MTgzYTk4MTA1MTJkNy5qcGc/cHJlc2V0PXNpdGV0aHVtYmRkAgMPDxYCHwNoZGQCBQ8PFgIfA2hkZAIFD2QWBGYPZBYCZg8PFgQfAgUMcHJ6ZXBpc293bmlhHwQFRmh0dHA6Ly93d3cucHJ6ZXBpc293bmlhLnBsL3ByemVwaXN5L2JhbmFub3dlLXBsYWN1c3praS16LW1pb2RlbS80NzgxODZkZAICDw8WAh8CBRtiYW5hbm93ZSBwbGFjdXN6a2kgeiBtaW9kZW1kZAIHD2QWAgICDw8WAh8CBRtiYW5hbm93ZSBwbGFjdXN6a2kgeiBtaW9kZW1kZAIJD2QWCGYPDxYCHwNoZGQCAQ8PFgIfA2hkZAICDw8WAh8DaGRkAgMPZBYCAgEPFgIeC18hSXRlbUNvdW50AgIWBGYPZBYCZg8VAQdrb2xhY2phZAICD2QWAmYPFQEPb2JpYWQgLSBtxIVjem5lZAILD2QWBAIKD2QWBAIDDw8WAh8CBQxwcnplcGlzb3duaWFkZAIHDw8WAh8CBUZodHRwOi8vd3d3LnByemVwaXNvd25pYS5wbC9wcnplcGlzeS9iYW5hbm93ZS1wbGFjdXN6a2ktei1taW9kZW0vNDc4MTg2ZGQCDg8WAh8HAgIWBGYPZBYCZg8VAgdrb2xhY2phB2tvbGFjamFkAgEPZBYCZg8VAg9v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MCRjcGhNaWRkbGUkY3BoTWFpbiRjYmxJbmdyZWRpZW50c0ZvclNob3BwaW5nJDEFOWN0bDAwJGN0bDAwJGNwaE1pZGRsZSRjcGhNYWluJGNibEluZ3JlZGllbnRzRm9yU2hvcHBpbmckMgU5Y3RsMDAkY3RsMDAkY3BoTWlkZGxlJGNwaE1haW4kY2JsSW5ncmVkaWVudHNGb3JTaG9wcGluZyQzBTljdGwwMCRjdGwwMCRjcGhNaWRkbGUkY3BoTWFpbiRjYmxJbmdyZWRpZW50c0ZvclNob3BwaW5nJDQFOWN0bDAwJGN0bDAwJGNwaE1pZGRsZSRjcGhNYWluJGNibEluZ3JlZGllbnRzRm9yU2hvcHBpbmckNQU5Y3RsMDAkY3RsMDAkY3BoTWlkZGxlJGNwaE1haW4kY2JsSW5ncmVkaWVudHNGb3JTaG9wcGluZyQ2BTljdGwwMCRjdGwwMCRjcGhNaWRkbGUkY3BoTWFpbiRjYmxJbmdyZWRpZW50c0ZvclNob3BwaW5nJDcFOWN0bDAwJGN0bDAwJGNwaE1pZGRsZSRjcGhNYWluJGNibEluZ3JlZGllbnRzRm9yU2hvcHBpbmckNwVFY3RsMDAkY3RsMDAkY3BoTWlkZGxlJGNwaFNpZGViYXIkc3BTaWRlYmFyJHJlcFBsYW5uZXJEYXlzJGN0bDAxJGxiQWRkBUVjdGwwMCRjdGwwMCRjcGhNaWRkbGUkY3BoU2lkZWJhciRzcFNpZGViYXIkcmVwUGxhbm5lckRheXMkY3RsMDIkbGJBZGQFRWN0bDAwJGN0bDAwJGNwaE1pZGRsZSRjcGhTaWRlYmFyJHNwU2lkZWJhciRyZXBQbGFubmVyRGF5cyRjdGwwMyRsYkFkZAVFY3RsMDAkY3RsMDAkY3BoTWlkZGxlJGNwaFNpZGViYXIkc3BTaWRlYmFyJHJlcFBsYW5uZXJEYXlzJGN0bDA0JGxiQWRkBUVjdGwwMCRjdGwwMCRjcGhNaWRkbGUkY3BoU2lkZWJhciRzcFNpZGViYXIkcmVwUGxhbm5lckRheXMkY3RsMDUkbGJBZGQFRWN0bDAwJGN0bDAwJGNwaE1pZGRsZSRjcGhTaWRlYmFyJHNwU2lkZWJhciRyZXBQbGFubmVyRGF5cyRjdGwwNiRsYkFkZAVFY3RsMDAkY3RsMDAkY3BoTWlkZGxlJGNwaFNpZGViYXIkc3BTaWRlYmFyJHJlcFBsYW5uZXJEYXlzJGN0bDA3JGxiQWRkY15QF3xBG96jO5hLQHYljOTGSn2ZvIJSjfD3+NoDzMk=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=DlqJLR6-_6jpC6iW_eRWu6an2OuzbC-Ay6ObgJ1bWmOljG077oXALbfTDpDSGN2MfgPuMa7kc6bMJJ8iMQUGUsByJ_PVxYguwqyB-LFA9Ck1&amp;t=636290335801323472" type="text/javascript"></script>
+
+
+<script src="/ScriptResource.axd?d=-aTFMCZTXsco26WX3pWUSedn4DCVRrhRHj79y6uEC-9xvpYR2aHspVSFf28WCPmBU84VCXPWiwBKiFTPW-cVVoGtUuyzl8lnsv4lQCoiQp43h1rqrdDZHiqTwhZ3gKU8-3VVcq0fChEFhWfPYHOjXfIxGG3bLNx2yGnwQ_jXp-41&amp;t=fffffffffe495078" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=wX_hm4N_07qA2UUBC4X7ubcov93JM8n3091HGZUTAMsTOvbChGrxhVgkr3OLS_djmgMZXJAR0b6SnQi78y-QsCTNAZGrQlG6CTGrfOPiwPxTea60-39PxTdUWOZpFK6w0&amp;t=ffffffffec54f2d7" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=sXGsC3h2EEaQBc9ucrwrK4rYuvdUVmq9kStNszfC-k_7eahn2Vp3e1t9SJndc1jnHZJ9UV7CJ4mT3p6as6Up58CYFKIw2M7sGnuls6fJ51uz9nozqbJqW2PvnMRPupCyHgWunZBzyXf8s0zRBhB6dA2&amp;t=ffffffffec54f2d7" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="3F71AA16" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdADCptQ5O1lO1sDHGoIA5hsjDJZgayw7poLstCmiGOfWW6kQ8AgsjHPRB+1VYSlXWyMTPrqW3pf+3sbiwbLIh3aojps7793GP/Snkj4CWyWucS1SIAlf5hA9GU3/9XMuGvZjg3iRSpKN8+PHGYQEP1OsS08oHWh1MW1t+s9pCN044nYTtT1pcDnDOBN3Pu8k3LRfJCA1bdd+djbYaLlVKgJg9pOIYEaseb/ZCC3ChpGNEcTcv1d89EIISPOkmfR1gYvVYVIdV4OrbkVyPYtN+9wGLsNI+8vog1i68BD20LPRn+K5YhynzP+A/JwzMUZvLpyr4gJ6hPY48ynkCxedoVhB/eKuv4SKQ0h/lSAyMik4Fy7BiA2ANsSiK7vbdxhaRa6AuZpltJ+UK8j7VrMH1oZCymAkWj2SfKCDRThcYQ58mewAXyx62H0vQe0GSXIELXpUwHgl7VoHEHeWnbNZ9qTROw/C6vPFPZjssixVyKYZU1CYHSB1NXmzw9XSztKfVAqBWImhN5OqCoIvxARavdf+47JElhEXakxbdvNfbBKpnkcFRVZShK7tf51TVle/JLipNeBT7I9HGYGB6M7ymZM5F/t3e1ewl5aSokt1+oURPkv0g3mFfCz/dfmXq8ScxA8fmYwmlfif//ggems4jHagnWoLhhRTgCAyAamPjVpqI+BR8NG9EkNYXBsaHY7zExWollCPYBm7pyOlPUxzd/R9+CutAYMwb8nqIXPWRMGTxcQm4BmbHt8Dne59cZLW5VjYY8dCGuHZDL28W/AidHuSI/AaXvzUfy+mP7ryYrRSu5/S2TWCjXvaab+08dDIbYWn5DAX48tpCOVm6m4rsGAkBy1gPrBP+McXsUEJjCLvjQY5eofgxuRtqSnIwb1Hzs4CUe8CUjRg0tjkdT1AO87nlgWo9QKQix33szs6ASOIQ3IPqk2sngjnEVEw71hunzLvet22qO1BjyytoPcQkU0663qcdZISMXfZK7K782QamAL1mw19blSkSSVHU+Ls4OC6U1n07VK3HGXQfXLJUFGvEnMwDT9kjbTOxcjPWp14kMw==" />
+</div>
+
+    <div id="adtop">
+        <div class="ad">
+            <div id='div-gpt-ad-1388437863564-1' style='width:728px; height:90px;'>
+            <script type='text/javascript'>
+                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388437863564-1'); });
+            </script>
+            </div>
+        </div>
+    </div>
+
+    <div id="searchautocontainer"></div>
+    <div id="container">
+        <div id="mainnav">
+            <div id="user">
+                <span class="login-name">Hi <span id="lblName">Renia</span></span>
+                <span class="signout"><a id="hlProfile" href="https://www.pepperplate.com/profile.aspx">Profile</a><a id="lbHelp" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$lbHelp&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Help</a><a id="logout" href="/logout.aspx">Sign Out</a></span>
+            </div>
+            <div id="logo"><a href="/"><img src="/img/logo_center.jpg" alt="Pepperplate" width="227" height="40" /></a></div>
+            <ul id="navitems">
+                <li id="liRecipes" class="active"><a class="recipes" href="/recipes/"></a></li>
+                <li id="liMenus"><a class="menus" href="/menus/"></a></li>
+                <li id="liPlanner"><a class="planner" href="/planner/"></a></li>
+
+                <li id="liShopping"><a class="shopping" href="/shopping/"><span id="shopTotalCount">(21)</span></a></li>
+                <li class="search"><input type="text" id="tbSearch" name="tbSearch" maxlength="100" class="searchtxt field" /><input id="btnSearch" name="btnSearch" type="button" class="btn" /></li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+
+        <div id="content">
+
+
+    <div class="masthead">
+	    <ul class="recnav">
+		    <li class="reclistnav"><a href="/recipes/"><span class="hide">recipe list</span></a></li>
+		    <li class="addrecnav"><a href="/recipes/create.aspx"><span class="hide">add a recipe</span></a></li>
+            <li class="manualrecnav"><a href="createm.aspx"><span class="hide">manual recipe</span></a></li>
+	    </ul>
+    </div>
+    <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ctl00$cphMiddle$cphTop$smPage', 'form1', [], [], [], 90, 'ctl00$ctl00');
+//]]>
+</script>
+
+
+    <div id="leftcolwide">
+
+
+    <div class="recipedet">
+
+    <div id="notification"></div>
+
+    <div class="topedit"><input type="image" name="ctl00$ctl00$cphMiddle$cphMain$lbTitleEdit" id="cphMiddle_cphMain_lbTitleEdit" class="editicon rollover" src="/img/icon_edit_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphMain$lbTitleEdit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" /></div>
+
+    <div id="cphMiddle_cphMain_pnlImageContainer" class="imagecontainer">
+
+        <img id="cphMiddle_cphMain_imgRecipeThumb" src="http://cdn2.pepperplate.com/recipes/5f9eefbf88d542008a7183a9810512d7.jpg?preset=sitethumb" style="height:165px;width:200px;" />
+
+
+
+</div>
+
+    <a id="cphMiddle_cphMain_hlSource" class="source" href="http://www.przepisownia.pl/przepisy/bananowe-placuszki-z-miodem/478186" target="_blank">przepisownia</a>
+    <h2><span id="cphMiddle_cphMain_lblTitle" class="text">bananowe placuszki z miodem</span></h2>
+    <p class="desc"><span id="cphMiddle_cphMain_lblDescription" class="text"></span></p>
+
+
+
+    <div class="recmeta">
+        <div id="cphMiddle_cphMain_pnlTags" class="tags item">
+
+                <h5>Categories</h5>
+                <span class="text">
+                kolacja, obiad - mączne
+                </span>
+
+</div>
+
+        <div class="buttons">
+
+        </div>
+        <div class="clear"></div>
+	</div>
+
+    <hr />
+
+
+        <div class="ingcontainer">
+        <div class="editaction">
+
+        </div>
+
+        <h3 class="inghdr">Ingredients<input type="image" name="ctl00$ctl00$cphMiddle$cphMain$lbEdit" id="cphMiddle_cphMain_lbEdit" class="editicon rollover" src="/img/icon_edit_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphMain$lbEdit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" /></h3>
+
+        <ul class="inggroups">
+                <li id="13184031">
+
+                    <ul id="13184031" class="inggroupitems">
+
+                                <li id="112544935" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">1</span>
+                                        banan, dojrzały
+                                    </span>
+                                </li>
+
+                                <li id="112544936" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">30</span>
+                                        g miodu, lub do smaku
+                                    </span>
+                                </li>
+
+                                <li id="112544937" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">1</span>
+                                        jajko
+                                    </span>
+                                </li>
+
+                                <li id="112544938" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">150</span>
+                                        g mleka
+                                    </span>
+                                </li>
+
+                                <li id="112544939" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">150</span>
+                                        g mąki
+                                    </span>
+                                </li>
+
+                                <li id="112544940" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">1</span>
+                                        łyżeczki proszku do pieczenia
+                                    </span>
+                                </li>
+
+                                <li id="112544941" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">2</span>
+                                        łyżeczki ekstraktu z wanilli
+                                    </span>
+                                </li>
+
+                                <li id="112544942" class="item">
+                                    <span class="content">
+                                        <span class="ingquantity">30</span>
+                                        g masła
+                                    </span>
+                                </li>
+
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+
+    <hr />
+
+
+
+        <div class="dircontainer">
+
+            <div class="editaction">
+
+            </div>
+
+            <h3>Instructions<input type="image" name="ctl00$ctl00$cphMiddle$cphMain$lbEditInstructions" id="cphMiddle_cphMain_lbEditInstructions" class="editicon rollover" src="/img/icon_edit_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphMain$lbEditInstructions&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" /></h3>
+
+            <ul class="dirgroups">
+                    <li id="11619370">
+
+                        <ol id="11619370" class="dirgroupitems">
+
+                                <li id="50670865"><span class="text">Umieść masło w naczyniu TMX i roztop go w temp. 50 &#176;/ obr. 2 / 2 min., aż się rozpuści.</span></li>
+
+                                <li id="50670866"><span class="text">Dodaj kawałki banana i zmiksuj je na obr. 4, do czasu uzyskania gładkiej masy.</span></li>
+
+                                <li id="50670867"><span class="text">Dodaj pozostałe składniki i miksuj na obr. 4 / 30 sekund</span></li>
+
+                                <li id="50670868"><span class="text">Powstałą masę nakładaj porcjami na patelnię z rozgrzanym masłem na małym lub średnim ogniu. Smażyć, aż pojawią się pęcherzyki, następnie odwr&#243;cić. Smażyć 20-30 sek.</span></li>
+
+                                <li id="50670869"><span class="text">Podawać na ciepło lub zamrozić na p&#243;źniej.</span></li>
+
+                        </ol>
+                    </li>
+                </ul>
+
+        </div>
+
+
+
+    <hr />
+
+
+    <div class="notecontainer">
+        <div class="editaction"></div>
+        <h3>Notes<input type="image" name="ctl00$ctl00$cphMiddle$cphMain$lbEditNotes" id="cphMiddle_cphMain_lbEditNotes" class="editicon rollover" src="/img/icon_edit_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphMain$lbEditNotes&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" /></h3>
+
+
+        <pre><span id="cphMiddle_cphMain_lblNotes" class="text"></span></pre>
+
+
+    </div>
+
+</div>
+<!-- begin old -->
+
+
+
+
+
+<div id="cphMiddle_cphMain_pnlMenuPopup" style="display:none;">
+
+    <select name="ctl00$ctl00$cphMiddle$cphMain$ddlMenus" id="cphMiddle_cphMain_ddlMenus">
+		<option value="153964">obiady inne</option>
+		<option value="188587">śniadanie</option>
+		<option value="188589">sur&#243;wki</option>
+		<option value="188590">obiady inne</option>
+		<option value="188592">przekąski/drugie śniadania</option>
+		<option value="188595">OBIADY z mięsem</option>
+
+	</select>
+    <a href="javascript:showMenu( this );">ADD</a>
+    <a href="#">CANCEL</a>
+
+</div>
+
+<div style="display:none;">
+    <div id="additemstoshoplist">
+        <div class="items">
+            <ul id="cphMiddle_cphMain_cblIngredientsForShopping">
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_0" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$0" checked="checked" value="112544935" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_0">1 banan, dojrzały</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_1" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$1" checked="checked" value="112544936" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_1">30 g miodu, lub do smaku</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_2" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$2" checked="checked" value="112544937" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_2">1 jajko</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_3" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$3" checked="checked" value="112544938" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_3">150 g mleka</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_4" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$4" checked="checked" value="112544939" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_4">150 g mąki</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_5" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$5" checked="checked" value="112544940" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_5">1 łyżeczki proszku do pieczenia</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_6" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$6" checked="checked" value="112544941" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_6">2 łyżeczki ekstraktu z wanilli</label></li>
+	<li><input id="cphMiddle_cphMain_cblIngredientsForShopping_7" type="checkbox" name="ctl00$ctl00$cphMiddle$cphMain$cblIngredientsForShopping$7" checked="checked" value="112544942" /><label for="cphMiddle_cphMain_cblIngredientsForShopping_7">30 g masła</label></li>
+
+</ul>
+        </div>
+
+        <div class="options">
+            <input type="submit" name="ctl00$ctl00$cphMiddle$cphMain$btnAddToShopping" value="ADD TO LIST" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphMain$btnAddToShopping&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="cphMiddle_cphMain_btnAddToShopping" class="button" />
+            <a href="javascript:toggleShoppingIngredients( true );">Select All</a>
+            <a href="javascript:toggleShoppingIngredients( false );">Clear All</a>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+    <div id="rightcolsm">
+
+    <div id="addrelatedcontainer"></div>
+    <div class="sidebarad">
+    <div id='div-gpt-ad-1388437863564-0' style='width:300px; height:250px;'>
+    <script type='text/javascript'>
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388437863564-0'); });
+    </script>
+    </div>
+    </div>
+    <div class="recdetactions">
+        <div class="actions">
+            <ul>
+                <li class="link first"><a id="cphMiddle_cphSidebar_hlAddToShoppingList" class="shopping" href="javascript:addToShopping();">Add to shopping list</a></li>
+                <li class="link"><a id="cphMiddle_cphSidebar_lbFavorite" class="fav" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$lbFavorite&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Favorite</a></li>
+                <li class="link"><a onclick="return confirm(&#39;are you sure you want to delete this recipe?&#39;);" id="cphMiddle_cphSidebar_lbDeleteRecipe" class="delete" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$lbDeleteRecipe&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Delete recipe</a></li>
+                <li class="link"><a href="javascript:window.print();" class="print">Print recipe</a></li>
+                <li class="share">
+                    <span>Share</span>
+                    <a id="emailicon" href="javascript:void(0);"><img src="/img/recdet/icn_email_off.png" class="rollover" /></a>
+                    <a href="javascript:shareFacebook();"><img src="/img/recdet/icn_fb_off.png" class="rollover" /></a>
+                    <a href="javascript:shareTwitter();"><img src="/img/recdet/icn_twitter_off.png" class="rollover" /></a>
+                    <!--<a href="javascript:sharePinterest();"><img src="/img/recdet/icn_pinterest_off.png" class="rollover" /></a>-->
+                    <div class="popcontainer">
+                        <div class="emailpopcontainer">
+                            <div class="emailform field">
+                                <div id="cphMiddle_cphSidebar_vsRegister" class="error" style="display:none;">
+
+</div>
+                                <label>From</label>
+                                <div class="emailfrom">reenia@o2.pl</div>
+                                <label>Send To<div class="note">(separate emails by a comma)</div></label>
+                                <textarea name="ctl00$ctl00$cphMiddle$cphSidebar$tbEmailSendTo" rows="4" cols="20" id="cphMiddle_cphSidebar_tbEmailSendTo" class="txt" maxchars="1000" style="width:240px;">
+</textarea>
+                                <span id="cphMiddle_cphSidebar_rfvEmail" style="display:none;"></span>
+                                <span id="cphMiddle_cphSidebar_rxvEmail" style="display:none;"></span>
+                                <div class="field">
+                                <label>Add a message</label>
+                                <textarea name="ctl00$ctl00$cphMiddle$cphSidebar$tbEmailDescription" rows="9" cols="20" id="cphMiddle_cphSidebar_tbEmailDescription" class="txt" maxchars="1000" style="width:240px;">
+</textarea>
+                                </div>
+                                <div class="btns">
+                                    <input type="submit" name="ctl00$ctl00$cphMiddle$cphSidebar$lbSend" value="Email Recipe" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$lbSend&quot;, &quot;&quot;, true, &quot;emailrecipe&quot;, &quot;&quot;, false, false))" id="cphMiddle_cphSidebar_lbSend" class="button" />
+                                </div>
+                            </div>
+                            <img src="/img/tooltip_arrowup.png" width="24" height="15" id="arrow" />
+                        </div>
+                    </div>
+                </li>
+                <li id="cphMiddle_cphSidebar_liOriginalRecipe" class="link"><a id="cphMiddle_cphSidebar_hlOriginalRecipe" class="link" href="http://www.przepisownia.pl/przepisy/bananowe-placuszki-z-miodem/478186" target="_blank">View Original Recipe</a></li>
+		    </ul>
+        </div>
+    </div>
+    <div class="recdetactions recdetactbtm">
+        <div id="cphMiddle_cphSidebar_pnlScaleRecipe">
+
+        <h3>Scale Recipe<a id="cphMiddle_cphSidebar_hlScalerToggle" class="scalertoggle" href="javascript:switchScaler();">free scale</a></h3>
+        <div class="scaler">
+            <div id="cphMiddle_cphSidebar_pnlScales" class="scales">
+
+                <a id="cphMiddle_cphSidebar_btn25" class="frac left" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn25&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">1/4</a>
+                <a id="cphMiddle_cphSidebar_btn33" class="frac" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn33&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">1/3</a>
+                <a id="cphMiddle_cphSidebar_btn50" class="frac" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn50&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">1/2</a>
+                <a id="cphMiddle_cphSidebar_btn1" class="active" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn1&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">1</a>
+                <a id="cphMiddle_cphSidebar_btn2" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn2&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">2</a>
+                <a id="cphMiddle_cphSidebar_btn3" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn3&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">3</a>
+                <a id="cphMiddle_cphSidebar_btn4" class="right" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btn4&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">4</a>
+
+                <div class="clear"></div>
+
+	</div>
+
+
+            <div id="cphMiddle_cphSidebar_pnlFreeScaleContainer" class="freescalefield" onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;cphMiddle_cphSidebar_btnFreeScale&#39;)">
+
+                <input type="submit" name="ctl00$ctl00$cphMiddle$cphSidebar$btnFreeScale" value="SCALE" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btnFreeScale&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="cphMiddle_cphSidebar_btnFreeScale" class="add" />
+                <input name="ctl00$ctl00$cphMiddle$cphSidebar$tbFreeScale" type="text" maxlength="7" id="cphMiddle_cphSidebar_tbFreeScale" class="txt" />
+
+	</div>
+        </div>
+
+</div>
+    </div>
+    <div class="recdetactions recdetactbtm">
+        <div class="related">
+        <h3>Related Recipes</h3>
+
+        <div id="cphMiddle_cphSidebar_pnlAddRelatedRecipe" class="addfield" onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;cphMiddle_cphSidebar_btnAddRelatedRecipe&#39;)">
+
+            <input type="hidden" name="ctl00$ctl00$cphMiddle$cphSidebar$hfAddRelatedRecipe" id="cphMiddle_cphSidebar_hfAddRelatedRecipe" />
+            <input type="submit" name="ctl00$ctl00$cphMiddle$cphSidebar$btnAddRelatedRecipe" value="ADD" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$btnAddRelatedRecipe&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="cphMiddle_cphSidebar_btnAddRelatedRecipe" class="add" />
+            <input name="ctl00$ctl00$cphMiddle$cphSidebar$tbAddRelatedRecipe" type="text" id="cphMiddle_cphSidebar_tbAddRelatedRecipe" class="txt" />
+
+</div>
+        </div>
+    </div>
+    <div id="cphMiddle_cphSidebar_pnlSideBar">
+
+
+
+<script type="text/javascript">
+
+    function registerSidebarPlanner() {
+        $('.dayitems').sortable({
+            connectWith: '.dayitems',
+            placeholder: 'mergeditem-placeholder',
+            forcePlaceholderSize: true,
+            delay: 200,
+            opacity: 0.2,
+            receive: function (event, ui) {
+
+                var dropid = event.target.id;
+                var itemid = $(ui.item).attr("id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "view.aspx/UpdateSchedule",
+                    contentType: "application/json; charset=utf-8",
+                    data: "{date:" + dropid + ",scheduleId:" + itemid + "}",
+                    dataType: "json",
+                    success: function (result) {
+                        //alert("s: " + result.d);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //alert("e: " + textStatus + ", t: " + errorThrown );
+                    }
+                });
+            }
+        });
+
+        $('.menurecipes').sortable({
+            placeholder: 'mergeditem-placeholder',
+            forcePlaceholderSize: true,
+            delay: 200,
+            opacity: 0.2,
+            update: function (event, ui) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "view.aspx/UpdateMenuRecipeOrder",
+                    contentType: "application/json; charset=utf-8",
+                    data: "{data:[" + $(this).sortable('toArray').toString() + "]}",
+                    dataType: "json",
+                    success: function (result) {
+                        //alert("s: " + result.d);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //alert("e: " + textStatus + ", t: " + errorThrown );
+                    }
+                });
+            }
+        });
+
+        $('.popupcal').DatePicker({
+            flat: true,
+            calendars: 1,
+            date: '2017-06-20',
+            current: '2017-06-20',
+            mode: 'single',
+            onRender: function (date) {
+                return {
+                    className: (date.valueOf() > Date.parse('2017-06-20') && date.valueOf() < Date.parse('2017-06-27')) ? 'datepickerSpecial' : false
+                }
+            },
+            onChange: function (formatted, dates) {
+                $('#cphMiddle_cphSidebar_spSidebar_hfSelectedDate').val(formatted);
+                __doPostBack('hfSelectedDate');
+            }
+        });
+
+        $('#datenav').click(function(e) {
+            e.stopPropagation();
+            var item = $('#calpopcontainer');
+
+            var visibleState = item.css('visibility') == 'visible';
+            item.css('visibility', visibleState ? 'hidden' : 'visible');
+        });
+
+        $(document).click(function () {
+            $('#calpopcontainer').css('visibility', 'hidden');
+        });
+    }
+
+</script>
+
+<div class="sidebartools">
+    <div class="tabs">
+        <a id="cphMiddle_cphSidebar_spSidebar_btnPlanner" class="active" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$btnPlanner&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Planner</a>
+        <a id="cphMiddle_cphSidebar_spSidebar_btnMenus" class="right" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$btnMenus&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Menus</a>
+    </div>
+
+
+
+    <input type="hidden" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$hfSelectedDate" id="cphMiddle_cphSidebar_spSidebar_hfSelectedDate" value="6/20/2017" />
+
+        <div class="planner">
+            <div id="datenav">
+                <span id="cphMiddle_cphSidebar_spSidebar_lblCurrentRange">Jun. 20 - Jun. 26</span><img src="/img/icon_calendar_off.png" class="rollover" />
+            </div>
+
+            <div class="popcontainer">
+                <div id="calpopcontainer">
+                    <div id="cont">
+                        <div class="popupcal"></div>
+                    </div>
+                    <img src="/img/tooltip_arrowup.png" width="24" height="15" id="arrow" />
+                </div>
+            </div>
+
+            <ul class="schedule">
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl01$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_0" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl01$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Today</span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636335136000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl02$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_1" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl02$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Tomorrow</span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636336000000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl03$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_2" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl03$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Thu 22<sup>nd</sup></span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636336864000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl04$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_3" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl04$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Fri 23<sup>rd</sup></span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636337728000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl05$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_4" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl05$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Sat 24<sup>th</sup></span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636338592000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl06$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_5" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl06$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Sun 25<sup>th</sup></span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636339456000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+
+                    <li>
+
+                        <div class="dayheader">
+                            <input type="image" name="ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl07$lbAdd" id="cphMiddle_cphSidebar_spSidebar_repPlannerDays_lbAdd_6" class="add rollover" src="/img/icon_add_off.png" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ctl00$cphMiddle$cphSidebar$spSidebar$repPlannerDays$ctl07$lbAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" />
+                            <span>Mon 26<sup>th</sup></span>
+                        </div>
+                        <div class="content">
+
+
+
+                        <ul id="636340320000000000" class="dayitems">
+
+                        </ul>
+                        </div>
+                    </li>
+                </ul>
+        </div>
+
+
+</div>
+
+</div>
+
+    </div>
+
+            <div class="clear"></div>
+        </div>
+        <div id="footer">
+            &copy; 2017 Pepperplate. All Rights Reserved. <a href="/about.aspx">About</a> <a href="/about.aspx">Contact</a> <a id="terms" href="/terms.aspx" target="_blank">Terms of Service</a>  <a id="privacy" href="/privacy.aspx" target="_blank">Privacy Policy</a>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("cphMiddle_cphSidebar_vsRegister"));
+var Page_Validators =  new Array(document.getElementById("cphMiddle_cphSidebar_rfvEmail"), document.getElementById("cphMiddle_cphSidebar_rxvEmail"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var cphMiddle_cphSidebar_vsRegister = document.all ? document.all["cphMiddle_cphSidebar_vsRegister"] : document.getElementById("cphMiddle_cphSidebar_vsRegister");
+cphMiddle_cphSidebar_vsRegister.validationGroup = "emailrecipe";
+var cphMiddle_cphSidebar_rfvEmail = document.all ? document.all["cphMiddle_cphSidebar_rfvEmail"] : document.getElementById("cphMiddle_cphSidebar_rfvEmail");
+cphMiddle_cphSidebar_rfvEmail.controltovalidate = "cphMiddle_cphSidebar_tbEmailSendTo";
+cphMiddle_cphSidebar_rfvEmail.errormessage = "Email Address is required";
+cphMiddle_cphSidebar_rfvEmail.display = "None";
+cphMiddle_cphSidebar_rfvEmail.validationGroup = "emailrecipe";
+cphMiddle_cphSidebar_rfvEmail.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+cphMiddle_cphSidebar_rfvEmail.initialvalue = "";
+var cphMiddle_cphSidebar_rxvEmail = document.all ? document.all["cphMiddle_cphSidebar_rxvEmail"] : document.getElementById("cphMiddle_cphSidebar_rxvEmail");
+cphMiddle_cphSidebar_rxvEmail.controltovalidate = "cphMiddle_cphSidebar_tbEmailSendTo";
+cphMiddle_cphSidebar_rxvEmail.errormessage = "Please enter a valid email address";
+cphMiddle_cphSidebar_rxvEmail.display = "None";
+cphMiddle_cphSidebar_rxvEmail.validationGroup = "emailrecipe";
+cphMiddle_cphSidebar_rxvEmail.evaluationfunction = "RegularExpressionValidatorEvaluateIsValid";
+cphMiddle_cphSidebar_rxvEmail.validationexpression = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*([,;]\\s*\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*)*";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("cphMiddle_cphTop_smPage_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();
+(function(id) {
+    var e = document.getElementById(id);
+    if (e) {
+        e.dispose = function() {
+            Array.remove(Page_ValidationSummaries, document.getElementById(id));
+        }
+        e = null;
+    }
+})('cphMiddle_cphSidebar_vsRegister');
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+
+document.getElementById('cphMiddle_cphSidebar_rfvEmail').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('cphMiddle_cphSidebar_rfvEmail'));
+}
+
+document.getElementById('cphMiddle_cphSidebar_rxvEmail').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('cphMiddle_cphSidebar_rxvEmail'));
+}
+//]]>
+</script>
+</form>
+    <!-- 1.0.6364.24981 -->
+</body>
+</html>
