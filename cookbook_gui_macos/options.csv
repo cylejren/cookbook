@@ -1,0 +1,11 @@
+OPTION NAME,VALUE,
+recipe_view_font_size_ing_default,15,
+recipe_view_font_size_desc_default,15,
+recipe_view_font_size_ing,15,
+recipe_view_font_size_desc,15,
+recipe_view_font_color_ing_default,,
+recipe_view_font_color_desc_default,,
+recipe_view_font_color_ing,,
+recipe_view_font_color_desc,,
+recipe_title_font_color_default,#c5661d,"[0, 1, 0, 1]"
+recipe_title_font_color,#c5661d,

@@ -1,0 +1,32 @@
+INFO:kivy:[Logger      ] Record log in /Users/r3nia/.kivy/logs/kivy_17-10-15_0.txt
+INFO:kivy:[Kivy        ] v1.10.0
+INFO:kivy:[Python      ] v3.6.3 (default, Oct  4 2017, 06:09:15) 
+[GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.37)]
+INFO:kivy:[Factory     ] 194 symbols loaded
+INFO:kivy:[Image       ] Providers: img_tex, img_imageio, img_dds, img_sdl2, img_gif (img_pil, img_ffpyplayer ignored)
+INFO:kivy:[OSC         ] using <multiprocessing> for socket
+INFO:kivy:[Window      ] Provider: sdl2
+INFO:kivy:[GL          ] Using the "OpenGL ES 2" graphics system
+INFO:kivy:[GL          ] Backend used <gl>
+INFO:kivy:[GL          ] OpenGL version <b'2.1 INTEL-10.25.17'>
+INFO:kivy:[GL          ] OpenGL vendor <b'Intel Inc.'>
+INFO:kivy:[GL          ] OpenGL renderer <b'Intel(R) HD Graphics 6000'>
+INFO:kivy:[GL          ] OpenGL parsed version: 2, 1
+INFO:kivy:[GL          ] Shading version <b'1.20'>
+INFO:kivy:[GL          ] Texture max size <16384>
+INFO:kivy:[GL          ] Texture max units <16>
+INFO:kivy:[Window      ] auto add sdl2 input provider
+INFO:kivy:[Window      ] virtual keyboard not allowed, single mode, not docked
+INFO:kivy:[Text        ] Provider: sdl2
+INFO:kivy:[Clipboard   ] Provider: sdl2(['clipboard_nspaste'] ignored)
+INFO:kivy:[GL          ] NPOT texture support is available
+INFO:kivy:[Base        ] Start application main loop
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_makaron_z_brokułowym_sosem.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_makaron_z_kurkami.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_piersi_kurczaka_w_sosie_borowikowo-serowym.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_polędwica_w_sosie_z_mascarpone.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_polędwica_w_sosie_z_mascarpone.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_masło_czosnkowo-cytrynowe_do_ryby.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_kurczak_w_cieście_francuskim.jpg
+ERROR:kivy:[Image       ] Error reading file ../cookbook_gui/recipe_images\pepperplate_kotlety_mielone_z_ryby.jpg
+INFO:kivy:[Base        ] Leaving application in progress...
