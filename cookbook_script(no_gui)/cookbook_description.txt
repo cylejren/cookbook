@@ -1,0 +1,72 @@
+przepis:
+- tytul - jeden, unikalny
+- kategorie, wiele
+- tagi, wiele
+- skladniki
+- opis
+
+
+kategoria:
+- tytul
+
+baza danych:
+tytul | kategorie | tagi | skladniki | opis
+
+skladniki - po enterach
+opis - po enterach
+
+
+
+MENU:
+    1 - dodaj przepis
+    2 - usun przepis
+    3 - dodaj kategorie
+    4 - koniec
+
+
+1. Podaj tytul: 
+ARKUSZ: przepisy
+musi byc min jakikolwiek znak (nie moze byc puste)
+musi sprawdzic czy w bazie danych jest juz taki tytul
+jezeli nie ma - dodaj go i daj info ze przepis jest dodany
+jezeli jest - podaj info ze nazwa musi byc inna i popros jeszcze raz o inputa dopoki nie bedzie ok
+opcja anuluj - jezeli uzytkownik wpisze np exit
+
+to co wpiszemy zbiera do slownika, i na sam koniec dodaje calosc do bazy danych
+
+gdy przejdziemy tytul, jestesmy proszeni o pozostale pola
+- tagi:
+
+wpisujemy po przecinku, tworzy sie z tego lista, slownik ?
+setdefault -jak nie bedzie takiego taga to go doda
+i potem jak klepniemy enter, to niech program z tego slownika sprawdzi czy sa juz wpisane w bazie w ARKUSZ TAGI, a jak nie to niech tam wpisze
+gdy je tam wpisze, niech te tago ze slownika/listy wpisze tez do przepisu w kolumnie TAGI, po przecinku
+gdy nie wpiszemy nic, tylko ENTER, niech program nie robi nic i przejdzie dalej
+
+- skladniki
+moze wpisywac w petli kazdy skladnik z osobna (petla while input == exit), i kazdy skladnik niech zostanie wpisany do ARKUSZ PRZEPIS w kolumnie skladniki (po enterach)
+
+- opis
+moze wpisywac w petli opis (petla while input == exit), i kazdy skladnik niech zostanie wpisany do ARKUSZ PRZEPIS w kolumnie opis (po enterach)
+
+- kategorie
+gdy uzytkownik wpisze (po przecinku, tworzy sie z tego lista, slownik ?), niech zostanie moze wywolana funkcja z kategorii, ktora sprawdzi czy kazda podana kat istnieje w ARKUSZ KATEGORIE, jezeli istnieje to niech wpisze ja do przepisu, a jezeli nie istnieje, to niech wpisze ja do przepisu i doda do ARKUSZ KATEGORIE
+
+
+
+2. usun przepis:
+to co uzytkownik wpisze jest sprawdzane w bazie danych
+a) wersja prosta: to co podal uzytkownik jest usuwane z bazy danych
+b) wersja pro: pokazuja sie wszystkie wyniki z danym slowem ktore podal uzytkownik, i podajac np ich numer kasuje sie (petla, aby mozna bylo usuwac wiele z jednego wyszukiwania)
+opcja anuluj - jezeli uzytkownik wpisze np exit
+
+
+3. dodaj kategorie
+ARKUSZ: katgegorie
+to co wpisze uzytkownik jest sprwadzane, jezeli istnieje taka nazwa, info ze nazwa musi byc inna i popros jeszcze raz o inputa dopoki nie bedzie ok
+jezeli nie ma - zapisze w bazie danych kategorie nowa
+opcja anuluj - jezeli uzytkownik wpisze np exit
+
+
+
+
