@@ -1,0 +1,124 @@
+# cookbook_popups.kv
+
+#: import main_class app_cookbook
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+#: import ListItemButton kivy.uix.listview.ListItemButton
+
+
+<AddCategoryPopup, ChangeNamePopup, FileNotFoundWarning, CreateNewDb, WarningPopup>:
+    # setting the same size and parameters for all popups
+    auto_dismiss: False
+    size_hint: None, None
+    size: 400, 150
+
+
+<AddCategoryPopup, ChangeNamePopup, CreateNewDB>:
+    entry_text: (entry.text).lower()
+    display: entry
+    on_open: self.display.focus = True
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        TextInput:
+            id: entry
+            multiline: False
+
+            # when press ENTER
+            on_text_validate:
+                if entry.text != "": root.save()
+                else: root.dismiss()
+
+        BoxLayout:
+            orientation: 'horizontal'
+            Button:
+                text: 'ZAPISZ'
+                on_press:
+                    if entry.text != "": root.save()
+                    else: root.dismiss()
+            Button:
+                text: 'ANULUJ'
+                on_press: root.dismiss()
+
+
+<ChooseFilePopup>:
+    size_hint: .8, .8
+    BoxLayout:
+        orientation: 'vertical'
+        FileChooserListView:
+            id: filechooser
+        BoxLayout:
+            size_hint_y: .15
+            padding: 10
+            spacing: 10
+            TextInput:
+                id: entry_image_path
+               #size_hint_y: .07
+                write_tab: False
+                hint_text: 'podaj url lub \u015bcie\u017ck\u0119..'
+
+        BoxLayout:
+            size_hint_y: .15
+            Button:
+                text: 'WYBIERZ'
+                on_press: root.save_image_file(filechooser.selection, entry_image_path.text)
+            Button:
+                text: 'ANULUJ'
+                on_press: root.dismiss()
+
+
+<FileNotFoundWarning, WarningPopup>:
+    # when warning popup is closed, set the focus on textinput image_path becaose user still wants to enter correct path
+    on_dismiss:
+        from kivy.clock import Clock
+        Clock.schedule_once(self.set_focus, 0.5)
+
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Sprawd\u017A czy podana scie\u017Cka jest prawid\u0142owa'
+            bold: True
+        Button:
+            text: 'ZAMKNIJ'
+            on_press: root.dismiss()
+
+
+<ListItemButton>:
+    #:import hex kivy.utils.get_color_from_hex
+    deselected_color: hex('#7C6363')
+    selected_color: hex('#BF5353')
+    # color: 0, 0, 0, 1 # this is text_color
+
+<UserDBButton@Button>:
+    font_size: self.height /3.5
+    bold: True
+
+<UserDB>:
+    size_hint: .4, .5
+    BoxLayout:
+        orientation: 'vertical'
+        ListView:
+            id: db_files_list_view
+            #on_adapter: self.adapter.bind_triggers_to_view(self._trigger_reset_populate)
+            adapter:
+                # read the existing in dir db files
+                ListAdapter(data = [file for file in root.create_list_with_files_from_db_file()],
+                cls = ListItemButton)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: .18
+            UserDBButton:
+                text: 'OTW\u00D3RZ'
+                on_press: root.open_db()
+            UserDBButton:
+                text: 'DODAJ'
+                on_press: root.add_new_db()
+            UserDBButton:
+                text: 'USU\u0143'
+                on_press: root.remove_db_file()
+            UserDBButton:
+                text: 'ZMIE\u0143 NAZW\u0118'
+                on_press: root.rename_db_file()
+            UserDBButton:
+                text: 'ANULUJ'
+                on_press: root.dismiss()

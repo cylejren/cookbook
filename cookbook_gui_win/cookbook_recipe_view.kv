@@ -1,0 +1,130 @@
+# cookbook_recipe_view.kv
+
+<ScrollView>:
+    effect_cls: 'ScrollEffect'
+
+<ScrollviewBackgroundColor@ScrollView, LabelBackgroundColor@Label>:
+    canvas.before:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 0.1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<RecipeView>:
+    orientation: 'vertical'
+    padding: 20
+    spacing: 10
+    BoxLayout:
+        size_hint_y: .4
+        padding: 10
+        spacing: 10
+        Image:
+            id: label_image
+            size_hint_x: .2
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            Label:
+                id: label_title
+                text: root.selected_recipe.text
+                font_size: self.height
+                #color: [0, 1, 0, 1]
+                #:import hex kivy.utils.get_color_from_hex
+                color: hex(app.get_recipe_options('font_color_title'))
+                bold: True
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                markup: True
+                on_ref_press: root.copy_label_text('label_title')
+            LabelBackgroundColor:
+                id: label_category
+                #font_size: 20
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+            LabelBackgroundColor:
+                id: label_tags
+                italic: True
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                markup: True
+                on_ref_press: root.copy_label_text('label_tags')
+            LabelBackgroundColor:
+                id: label_source
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                markup: True
+                on_ref_press:
+                    import webbrowser
+                    from kivy.core.text.markup import MarkupLabel
+                    hyperlink = (MarkupLabel(self.text).markup)[1]
+                    webbrowser.open(hyperlink)
+
+    BoxLayout:
+        spacing: 10
+        size_hint_y: .1
+        Label:
+            text: 'SK\u0141ADNIKI:'
+            size_hint_x: .33
+            bold: True
+            size: self.texture_size
+            font_size: 20
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+        Label:
+            text: 'OPIS:'
+            size_hint_x: .67
+            bold: True
+            size: self.texture_size
+            font_size: 20
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+
+    BoxLayout:
+        spacing: 10
+        #size_hint_y: .98
+        ScrollviewBackgroundColor:
+            size_hint_x: .33
+            Label:
+                id: label_ingredients
+                padding: 10, 10
+                #size_hint_x: .32
+                #text_size: self.size
+                font_size: app.get_recipe_options('font_size_ingredients')
+
+                text_size: [self.width, None]
+                size_hint_y: None
+                height: self.texture_size[1]
+
+                halign: 'left'
+                valign: 'top'
+
+                markup: True
+                on_ref_press: root.copy_label_text('label_ingredients')
+
+
+        ScrollviewBackgroundColor:
+            size_hint_x: .67
+            Label:
+                id: label_description
+                padding: 10, 10
+                #size_hint_x: .63
+                #text_size: self.size
+                font_size: app.get_recipe_options('font_size_description')
+
+                text_size: [self.width, None]
+                size_hint_y: None
+                height: self.texture_size[1]
+
+                halign: 'left'
+                valign: 'top'
+
+                markup: True
+                on_ref_press: root.copy_label_text('label_description')

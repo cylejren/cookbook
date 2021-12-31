@@ -1,0 +1,164 @@
+# cookbook_add_edit_recipe.kv
+
+<AddRecipeScreen>:
+    size_hint: .8,.8
+    auto_dismiss: False
+
+    title: entry_title.text
+    category: (entry_category.text).lower()
+    tags: entry_tags.text
+    source: entry_source.text
+    ingredients: entry_ingredients.text
+    description: entry_description.text
+    image_location: image_path_label.text
+
+    GridLayout:
+        spacing: 10
+        padding: 15
+        rows: 5
+        columns: 2
+
+        # row 1, column 1
+        # tytul (label, input), kategoria (label, input)
+        GridLayout:
+            spacing: 10
+            rows: 2
+            columns: 2
+            size_hint_y: .15
+            Label:
+                text: 'Tytu\u0142:'
+                size_hint_x: .25
+                text_size: self.size
+                halign: 'right'
+                valign: 'bottom'
+            TextInput:
+                id: entry_title
+                focus: True
+                multiline: False
+                # when TAB key - move to another widget
+                write_tab: False
+                padding_y: (self.height - self.line_height)/2
+                #text_size: self.size
+                hint_text: 'Podaj tytu\u0142...'
+
+            Label:
+                text: 'Kategoria:'
+                size_hint_x: .25
+                text_size: self.size
+                halign: 'right'
+                valign: 'bottom'
+            TabTextInput:
+                id: entry_category
+                multiline: False
+                write_tab: False if self.text == '' else True
+                padding_y: ((self.height - self.line_height)/2)
+                hint_text: 'Podaj kategori\u0119...'
+                text: root.set_category_hint()
+                on_text: self.set_suggestion_text(self.text, 'category')
+
+
+        # row 1, column 2
+        # tagi (label, input), zrodlo (label, input)
+        GridLayout:
+            spacing: 10
+            rows: 2
+            columns: 2
+            size_hint_y: .15
+            Label:
+                text: 'tagi:'
+                size_hint_x: .25
+                text_size: self.size
+                halign: 'right'
+                valign: 'bottom'
+            TabTextInput:
+                id: entry_tags
+                multiline: False
+                write_tab: False if self.text == '' else True
+                padding_y: ((self.height - self.line_height)/2)
+                hint_text: 'Podaj tagi...'
+                on_text: self.set_suggestion_text(self.text, 'tags')
+
+            Label:
+                text: '\u017Ar\u00F3d\u0142o:'
+                size_hint_x: .25
+                text_size: self.size
+                halign: 'right'
+                valign: 'bottom'
+            TextInput:
+                id: entry_source
+                multiline: False
+                write_tab: False
+                padding_y: ((self.height - self.line_height)/2)
+                hint_text: '\u0179r\u00F3d\u0142o przepisu...'
+
+        # row 2, column 1
+        # zdjecie (label)
+        Label:
+            id: image_path_label
+            size_hint_y: .07
+            text: 'brak zdj\u0119cia...'
+
+        # row 2, column 2
+        # zdjecie (button)
+        Button:
+            id: add_image_button
+            size_hint_y: .07
+            text: 'Dodaj zdj\u0119cie'
+            on_press: root.choose_image_file_button()
+
+        # row 3, column 1
+        # skladniki (label)
+        Label:
+            text: 'Sk\u0142adniki:'
+            size_hint: .3, .08
+            text_size: self.size
+            halign: 'left'
+            valign: 'bottom'
+            bold: True
+
+        # row 3, column 2
+        # opis (label)
+        Label:
+            text: 'Opis:'
+            size_hint: .3, .08
+            text_size: self.size
+            halign: 'left'
+            valign: 'bottom'
+            bold: True
+
+        # row 4, column 1
+        # skladniki (input)
+        TextInput:
+            id: entry_ingredients
+            size_hint_y: .75
+            write_tab: False if self.text == '' else True
+            hint_text: 'Podaj sk\u0142adniki...'
+
+        # row 4, column 2
+        # opis (input)
+        TextInput:
+            id: entry_description
+            size_hint_y: .75
+            write_tab: False if self.text == '' else True
+            hint_text: 'Podaj opis...'
+
+        # row 5, column 1
+        Button:
+            text: 'ZAPISZ'
+            size_hint_y: .13
+            on_press:
+                # if no entries, do not save, just cancel
+                if (entry_title.text == '' and entry_category.text == '' and entry_ingredients.text == '' and entry_description.text == ''): root.close()
+                else: root.save_recipe()
+
+        # row 5, column 2
+        Button:
+            text: 'ANULUJ'
+            size_hint_y: .13
+            on_press: root.close()
+
+
+<EditRecipeScreen>:
+    on_dismiss:
+        from kivy.clock import Clock
+        Clock.schedule_once(self.reload_recipe_view, 0.2)
